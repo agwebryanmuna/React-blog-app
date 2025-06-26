@@ -22,8 +22,6 @@ const Navbar = () => {
           src="/logo.png"
           className="size-8"
           alt="logo"
-          width={32}
-          height={32}
         />
         <span>Blogga</span>
       </Link>
