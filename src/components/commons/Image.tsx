@@ -5,8 +5,8 @@ interface ImageProps {
   className?: string;
   alt?: string;
   src: string;
-  width?: number,
-  height?: number,
+  width?: number;
+  height?: number;
 }
 
 const Image = ({ className, alt, src, width, height }: ImageProps) => {
@@ -19,16 +19,13 @@ const Image = ({ className, alt, src, width, height }: ImageProps) => {
       lqip={{ active: true, quality: 20 }}
       width={width}
       height={height}
-      transformation={
-        [
-          {
-            width: width,
-            height:height,
-          }
-        ]
-      }
+      transformation={[
+        {
+          width: width,
+          height: height,
+        },
+      ]}
     />
-    // <img src={src} alt={alt} className={className} />
   );
 };
 
