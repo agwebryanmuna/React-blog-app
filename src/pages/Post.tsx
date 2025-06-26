@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import Image from "../components/commons/Image";
 import PostMenuActions from "../components/PostMenuActions";
 import Search from "../components/commons/Search";
+import Comments from "../components/Comments";
 
 const Post = () => {
   return (
@@ -172,6 +173,7 @@ const Post = () => {
           <Search />
         </div>
       </div>
+      <Comments/>
     </div>
   );
 };

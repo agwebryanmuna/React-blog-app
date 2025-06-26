@@ -15,3 +15,9 @@
 .animatedButton {
   animation-duration: 10000ms;
 }
+
+.ql-container,
+.ql-toolbar,
+.ql-editor {
+  border: none !important;
+}
