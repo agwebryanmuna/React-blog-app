@@ -4,10 +4,11 @@ import cors from "cors";
 import compression from "compression";
 import helmet from "helmet";
 import { corsOptions } from "./src/config/cors.config.js";
-import userRouter from "./src/routes/userRoute.js";
-import postRouter from "./src/routes/postRoute.js";
-import commentRouter from "./src/routes/commentRouter.js";
+import userRouter from "./src/routes/user.route.js";
+import postRouter from "./src/routes/post.route.js";
+import commentRouter from "./src/routes/comment.route.js";
 import connectDb from "./src/config/db.config.js";
+import webhookRouter from "./src/routes/webhook.route.js";
 
 const app = express();
 
@@ -23,14 +24,24 @@ app.use(helmet());
 // connect db
 await connectDb()
 
-// Users endpoint
-app.use('/api/user', userRouter)
-app.use('/api/post', postRouter)
-app.use('/api/comment', commentRouter)
+// endpoints
+app.use('/api/users', userRouter)
+app.use('/api/posts', postRouter)
+app.use('/api/comments', commentRouter)
+app.use('/api/webhooks', webhookRouter)
 
 app.get("/", (_, res) => {
   res.send("API working 😘");
 });
+
+// Error handler. Must be defined last after other app.use.
+app.use((err, req, res, next) => {
+  console.error(err)
+  res.status(err.status || 500).json({
+    status: err.status,
+    message: err.message || "Something went wrong!",
+  })
+})
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
