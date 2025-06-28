@@ -9,8 +9,18 @@ import postRouter from "./src/routes/post.route.js";
 import commentRouter from "./src/routes/comment.route.js";
 import connectDb from "./src/config/db.config.js";
 import webhookRouter from "./src/routes/webhook.route.js";
+import { clerkMiddleware } from '@clerk/express'
+
 
 const app = express();
+
+// checks the request cookies and headers for session JWT
+// If found, attaches the Auth object to the request under the auth key
+app.use(clerkMiddleware())
+
+// Using body-parser for this route which conflicts with express.json(),
+// thus this position.
+app.use('/api/webhooks', webhookRouter)
 
 // middleware
 app.use(express.json());
@@ -28,7 +38,6 @@ await connectDb()
 app.use('/api/users', userRouter)
 app.use('/api/posts', postRouter)
 app.use('/api/comments', commentRouter)
-app.use('/api/webhooks', webhookRouter)
 
 app.get("/", (_, res) => {
   res.send("API working 😘");
