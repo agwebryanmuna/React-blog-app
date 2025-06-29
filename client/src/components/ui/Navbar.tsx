@@ -18,11 +18,7 @@ const Navbar = () => {
     <div className="w-full h-16 md:h-20 flex items-center justify-between">
       {/* LOGO */}
       <Link to="/" className="flex items-center gap-4 text-2xl font-bold">
-        <Image
-          src="/logo.png"
-          className="size-8"
-          alt="logo"
-        />
+        <Image src="/logo.png" className="size-8" alt="logo" />
         <span>Blogga</span>
       </Link>
 
@@ -47,11 +43,16 @@ const Navbar = () => {
               {link.name}
             </NavLink>
           ))}
-          <Link to={""}>
-            <button className="py-2 px-4 rounded-3xl bg-blue-800 text-white">
-              Login 👋
-            </button>
-          </Link>
+          <SignedOut>
+            <Link to={"/login"}>
+              <button className="py-2 px-4 rounded-3xl bg-blue-800 text-white">
+                Login 👋
+              </button>
+            </Link>
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
         </div>
       </div>
 

@@ -6,10 +6,26 @@ import Write from "./pages/Write";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Layout from "./components/Layout";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000,
+      gcTime: 10 * 60 * 1000,
+      retry: false,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
 
 const App = () => {
   return (
     <BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -20,6 +36,7 @@ const App = () => {
           <Route path="/register" element={<Register />} />
         </Routes>
       </Layout>
+    </QueryClientProvider>
     </BrowserRouter>
   );
 };

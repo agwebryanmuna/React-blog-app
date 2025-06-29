@@ -19,14 +19,14 @@ export const clerkWebHook = async (req, res) => {
   }
 
   if (evt.type === "user.created") {
-    const clerkId = evt.data.id;
+    const clerkUserId = evt.data.id;
     const email = evt.data.email_addresses[0].email_address;
-    const username = evt.data.username || email.split("@")[0];
+    const username = email.split("@")[0];
     const img = evt.data.profile_img_url;
 
     // Add user to database
     await User.create({
-      clerkId,
+      clerkUserId,
       username,
       email,
       img,
