@@ -16,7 +16,20 @@ export const getPost = async (req, res) => {
 // CREATE POST
 export const createPost = async (req, res) => {
   const { _id: userId } = req.user;
-  const post = await Post.create({ user: userId, ...req.body });
+
+  let slug = req.body.title.trim().replace(" ", "-").toLowerCase();
+
+  let existingSlug = await Post.find({ slug });
+  let count = 0;
+  if (existingSlug) {
+    count = existingSlug.length + 1;
+    slug = slug + "-" + count;
+  }
+
+  // TODO: 
+  // MAKE SURE THERE ARE NO DUPLICATE TITLES IN DB
+  
+  const post = await Post.create({ user: userId, slug, ...req.body });
   res.status(200).json({ ...post });
 };
 

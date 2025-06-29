@@ -11,22 +11,38 @@ class Post {
   private async fetchData<T>(
     url: string,
     method?: FetchMethod,
-    body?: PostType
+    post?: PostType,
+    token?: string | null
   ): Promise<T> {
-    const response = await fetch(url, {
-      method: method ? method : "GET",
-      body: body ? JSON.stringify(body) : undefined,
-    });
+    let response;
+    if (!token) {
+      response = await fetch(url, {
+        method: method ? method : "GET",
+        body: post ? JSON.stringify(post) : undefined,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } else {
+      response = await fetch(url, {
+        method: method ? method : "GET",
+        body: post ? JSON.stringify(post) : undefined,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+    }
     if (!response.ok) throw new Error(`${response.statusText}`);
 
     return response.json();
   }
 
   // Get all posts
-  async getPosts(): Promise<PostType> {
+  async getPosts(): Promise<PostType[]> {
     const url = this.createUrl();
 
-    return this.fetchData<PostType>(url);
+    return this.fetchData<PostType[]>(url);
   }
 
   // get single post
@@ -37,9 +53,10 @@ class Post {
   }
 
   // create post
-  async createPost(post: PostType): Promise<PostType> {
+  async createPost(post: PostType, token: string | null): Promise<PostType> {
     const url = this.createUrl();
-    return this.fetchData<PostType>(url, "POST", post);
+
+    return this.fetchData<PostType>(url, "POST", post, token);
   }
 
   // delete post

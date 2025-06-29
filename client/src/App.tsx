@@ -8,35 +8,23 @@ import Login from "./pages/Login";
 import Layout from "./components/Layout";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 5 * 60 * 1000,
-      gcTime: 10 * 60 * 1000,
-      retry: false,
-      refetchOnWindowFocus: false,
-    },
-  },
-});
-
+const queryClient = new QueryClient();
 
 const App = () => {
   return (
     <BrowserRouter>
-    <QueryClientProvider client={queryClient}>
-
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/posts" element={<PostsList />} />
-          <Route path="/posts/:slug" element={<Post />} />
-          <Route path="/write" element={<Write />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Routes>
-      </Layout>
-    </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/posts" element={<PostsList />} />
+            <Route path="/posts/:slug" element={<Post />} />
+            <Route path="/write" element={<Write />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Routes>
+        </Layout>
+      </QueryClientProvider>
     </BrowserRouter>
   );
 };
