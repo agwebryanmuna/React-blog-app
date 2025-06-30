@@ -17,7 +17,10 @@ export const getPost = async (req, res) => {
 export const createPost = async (req, res) => {
   const { _id: userId } = req.user;
 
-  let slug = req.body.title.trim().replace(" ", "-").toLowerCase();
+  // Handle all whitespace (tabs, multiple spaces, etc.) and clean up nicely:
+  let slug = req.body.title.trim().toLowerCase().replace(/\s+/g, "-");
+
+console.log(slug);
 
   let existingSlug = await Post.find({ slug });
   let count = 0;

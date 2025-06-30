@@ -12,7 +12,7 @@ const Write = () => {
 
   const { getToken } = useAuth();
 
-  const mutation = useMutation({
+  const createNewPost = useMutation({
     mutationFn: async (newPost: PostType) => {
       const token = await getToken();
       return postAPI.createPost(newPost, token);
@@ -26,13 +26,15 @@ const Write = () => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+    console.log(formData);
+    
     const data: Omit<PostType, "_id" | "user"> = {
       title: formData.get("title") as string,
       category: formData.get("category") as string,
       desc: formData.get("desc") as string,
       content: value as string,
     };
-    mutation.mutate(data);
+    createNewPost.mutate(data);
   };
 
   return (
@@ -78,9 +80,15 @@ const Write = () => {
           value={value}
           onChange={setValue}
         />
-        <button className="bg-blue-800 text-white font-medium rounded-xl mt-4 p-2 w-36">
-          Send
+        <button
+          disabled={createNewPost.isPending}
+          className={
+            "bg-blue-800 text-white font-medium rounded-xl mt-4 p-2 w-36 disabled:bg-blue-400 disabled:cursor-not-allowed"
+          }
+        >
+          {createNewPost.isPending ? "Creating..." : "Send"}
         </button>
+        {createNewPost.isError && <span>{createNewPost.error.message}</span>}
       </form>
     </div>
   );
