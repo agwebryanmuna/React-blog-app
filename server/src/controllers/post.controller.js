@@ -1,4 +1,5 @@
 import Post from "../models/post.model.js";
+import imagekit from "../config/imagekit.js";
 
 // GET ALL POSTS
 export const getPosts = async (req, res) => {
@@ -20,11 +21,10 @@ export const createPost = async (req, res) => {
   // Handle all whitespace (tabs, multiple spaces, etc.) and clean up nicely:
   let slug = req.body.title.trim().toLowerCase().replace(/\s+/g, "-");
 
-console.log(slug);
-
   let existingSlug = await Post.find({ slug });
+  
   let count = 0;
-  if (existingSlug) {
+  if (existingSlug.length > 0) {
     count = existingSlug.length + 1;
     slug = slug + "-" + count;
   }
@@ -49,3 +49,9 @@ export const deletePost = async (req, res) => {
     return res.status(403).json("You can only delete your posts!");
   res.status(200).json("Post has been deleted");
 };
+ 
+// UPLOAD FILES
+export const uploadFiles = async (req, res) => {
+  const { token, expire, signature } = imagekit.getAuthenticationParameters();
+  res.send({ token, expire, signature, publicKey: process.env.IMAGEKIT_PUBLIC_KEY });
+}

@@ -1,6 +1,6 @@
 import { BASE_URL } from "../../config/server";
 import type { FetchMethod } from "../../global.type";
-import type { PostType } from "./post.types";
+import type { PostType, PostTypeRequest, PostTypeResponse } from "./post.types";
 
 class Post {
   private createUrl(params?: string) {
@@ -11,7 +11,7 @@ class Post {
   private async fetchData<T>(
     url: string,
     method?: FetchMethod,
-    post?: PostType,
+    post?: PostTypeRequest,
     token?: string | null
   ): Promise<T> {
     let response;
@@ -39,10 +39,10 @@ class Post {
   }
 
   // Get all posts
-  async getPosts(): Promise<PostType[]> {
+  async getPosts(): Promise<PostTypeResponse> {
     const url = this.createUrl();
 
-    return this.fetchData<PostType[]>(url);
+    return this.fetchData<PostTypeResponse>(url);
   }
 
   // get single post
@@ -53,10 +53,10 @@ class Post {
   }
 
   // create post
-  async createPost(post: PostType, token: string | null): Promise<PostType> {
+  async createPost(post: PostTypeRequest, token: string | null): Promise<PostTypeResponse> {
     const url = this.createUrl();
 
-    return this.fetchData<PostType>(url, "POST", post, token);
+    return this.fetchData<PostTypeResponse>(url, "POST", post, token);
   }
 
   // delete post

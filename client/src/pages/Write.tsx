@@ -1,23 +1,25 @@
 import { useAuth, useUser } from "@clerk/clerk-react";
 import "react-quill-new/dist/quill.snow.css";
 import ReactQuill from "react-quill-new";
-import { postAPI } from "../api/model/post/post";
-import { useMutation } from "@tanstack/react-query";
-import type { PostType } from "../api/model/post/post.types";
-import { useState, type FormEvent } from "react";
+
+import type { PostTypeRequest } from "../api/model/post/post.types";
+import React, { useEffect, useRef, useState, type FormEvent } from "react";
+import { useCreatePost } from "../hooks/useCreatePost";
+import UploadImage from "../components/UploadImage";
 
 const Write = () => {
+  const { getToken } = useAuth();
+  const [token, setToken] = useState<string>("");
   const { isLoaded, isSignedIn } = useUser();
   const [value, setValue] = useState<ReactQuill.Value>("");
+  const [cover, setCover] = useState<string>("");
+  const [contentImage, setContentImage] = useState<string>("");
+  const [progress, setProgress] = useState<number>(0);
+  // Create a ref for the file input element to access its files easily
+  const coverInputRef = useRef<HTMLInputElement | null>(null);
+  const contentInputRef = useRef<HTMLInputElement | null>(null);
 
-  const { getToken } = useAuth();
-
-  const createNewPost = useMutation({
-    mutationFn: async (newPost: PostType) => {
-      const token = await getToken();
-      return postAPI.createPost(newPost, token);
-    },
-  });
+  const createNewPost = useCreatePost(token);
 
   if (!isLoaded) return <div className="">Loading...</div>;
 
@@ -25,10 +27,10 @@ const Write = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     const formData = new FormData(e.currentTarget);
-    console.log(formData);
-    
-    const data: Omit<PostType, "_id" | "user"> = {
+
+    const data: PostTypeRequest = {
       title: formData.get("title") as string,
       category: formData.get("category") as string,
       desc: formData.get("desc") as string,
@@ -37,15 +39,27 @@ const Write = () => {
     createNewPost.mutate(data);
   };
 
+  useEffect(() => {
+    getToken().then((tk) => (tk ? setToken(tk) : null));
+  }, []);
+
+  // <p><img src=${contentImage.url} /></p>
+
   return (
     <div className="h-[calc(100vh-64px)] md:h-[calc(100vh-80px)] flex flex-col gap-6">
       <h1 className="text-clip font-light">Create a New Post</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-6 flex-1 mb-6">
-        <button className="w-max p-2 shadow-md rounded-xl text-sm text-gray-500 bg-white">
-          Add a cover image
-        </button>
+        <UploadImage
+          setData={setCover}
+          setProgress={setProgress}
+          clerkToken={token}
+        >
+          <label className="w-max p-2 shadow-md rounded-xl text-sm text-gray-500 bg-white">
+            Add a cover image
+          </label>
+        </UploadImage>
+
         <input
-          required
           name="title"
           className="text-4xl font-semibold bg-transparent outline-0"
           type="text"
@@ -74,12 +88,23 @@ const Write = () => {
           className="p-4 rounded-xl bg-white shadow-md"
           placeholder="A short Description"
         ></textarea>
-        <ReactQuill
-          theme="snow"
-          className="flex-1 rounded-xl bg-white shadow-md"
-          value={value}
-          onChange={setValue}
-        />
+        <div className="flex flex-1 flex-col md:flex-row gap-2">
+          <UploadImage
+            setData={setCover}
+            setProgress={setProgress}
+            clerkToken={token}
+          >
+            <label>
+              <i className="fa-solid fa-image"></i>
+            </label>
+          </UploadImage>
+          <ReactQuill
+            theme="snow"
+            className="flex-1 rounded-xl bg-white shadow-md"
+            value={value}
+            onChange={setValue}
+          />
+        </div>
         <button
           disabled={createNewPost.isPending}
           className={

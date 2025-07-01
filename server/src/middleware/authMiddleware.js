@@ -3,6 +3,7 @@ import User from "../models/user.model.js";
 const authMiddleware = async (req, res, next) => {
   // req.auth passed from clerkmiddleware(). Should contain the token
   const {userId:clerkUserId} = req.auth();
+console.log(req.auth());
 
   if (!clerkUserId) return res.status(401).json("Not authenticated!");
 

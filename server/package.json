@@ -21,6 +21,7 @@
     "express": "^5.1.0",
     "express-rate-limit": "^7.5.1",
     "helmet": "^8.1.0",
+    "imagekit": "^6.0.0",
     "mongoose": "^8.16.1",
     "rate-limit-redis": "^4.2.1",
     "redis": "^5.5.6",
