@@ -8,16 +8,16 @@ import {
   ImageKitUploadNetworkError,
   upload,
 } from "@imagekit/react";
-import Loader from "./commons/Loader";
+import { useAuth } from "@clerk/clerk-react";
 
-const authenticator = async (clerkToken: string) => {
+const authenticator = async (clerkToken: string | null) => {
   try {
     // Perform the request to the upload authentication endpoint.
     const response = await fetch(`${BASE_URL}/posts/upload-files`, {
       headers: {
-          Authorization: `Bearer ${clerkToken}`,
-          "Content-Type": "application/json",
-        }
+        Authorization: `Bearer ${clerkToken}`,
+        "Content-Type": "application/json",
+      },
     });
 
     if (!response.ok) {
@@ -44,16 +44,11 @@ const authenticator = async (clerkToken: string) => {
 interface UploadImageProps {
   children: React.ReactNode;
   setData: React.Dispatch<React.SetStateAction<string>>;
-  clerkToken: string;
   setProgress: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const UploadImage = ({
-  children,
-  setData,
-  clerkToken,
-  setProgress,
-}: UploadImageProps) => {
+const UploadImage = ({ children, setData, setProgress }: UploadImageProps) => {
+  const { getToken } = useAuth();
   const [isUploading, setIsUploading] = useState<Boolean>(false);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -74,7 +69,8 @@ const UploadImage = ({
     // Retrieve authentication parameters for the upload.
     let authParams;
     try {
-      authParams = await authenticator(clerkToken);
+      const token = await getToken();
+      authParams = await authenticator(token);
     } catch (authError: any) {
       setIsUploading(false);
       console.log(authError);
@@ -92,8 +88,7 @@ const UploadImage = ({
         signature,
         publicKey,
         file,
-        fileName: file.name, // Optionally set a custom file name
-        // Progress callback to update upload progress state
+        fileName: file.name,
         onProgress: (event) => {
           setProgress((event.loaded / event.total) * 100);
         },
@@ -139,7 +134,7 @@ const UploadImage = ({
       />
 
       <div onClick={() => fileInputRef.current?.click()}>
-        {isUploading ? <Loader /> : children}
+        {isUploading ? <div>Uploading image...</div> : children}
       </div>
     </div>
   );

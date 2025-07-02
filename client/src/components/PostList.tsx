@@ -1,28 +1,51 @@
 import PostListItem from "./PostListItem";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { postAPI } from "../api/model/post/post";
-import type { PostType } from "../api/model/post/post.types";
+import Loader from "./commons/Loader";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const PostList = () => {
-  // const { isPending, error, data } = useQuery({
-  //   queryKey: ["posts"],
-  //   queryFn: ():Promise<PostType> => postAPI.getPosts(),
-  // });
+  const {
+    data,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    status,
+  } = useInfiniteQuery({
+    queryKey: ["posts"],
+    queryFn: async ({ pageParam = 1 }) =>
+      postAPI.getPosts({ page: pageParam, limit: 2 }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, pages) => {
+      return lastPage.hasMore ? pages.length + 1 : undefined;
+    },
+  });
+
+  if (status === "pending") return <Loader />;
+
+  if (status === "error") return "Something went wrong!";
+
+  const allPosts = data?.pages?.flatMap((page) => page.posts) || [];
 
   return (
-    <div className="flex flex-col gap-12 mb-8">
-      <PostListItem />
-      <PostListItem />
-      <PostListItem />
-      <PostListItem />
-      <PostListItem />
-      <PostListItem />
-      <PostListItem />
-      <PostListItem />
-      <PostListItem />
-      <PostListItem />
-    </div>
-  );
+    <InfiniteScroll
+      dataLength={allPosts.length}
+      next={fetchNextPage}
+      hasMore={!!hasNextPage}
+      loader={<h4>Loading more posts...</h4>}
+      endMessage={
+        <p>
+          <b>Yay! You have seen all posts</b>
+        </p>
+      }
+    >
+      {allPosts.map((post) => (
+        <PostListItem key={post.slug} post={post} />
+      ))}
+    </InfiniteScroll>
+);
 };
 
 export default PostList;

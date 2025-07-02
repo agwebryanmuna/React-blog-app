@@ -1,68 +1,52 @@
 import { BASE_URL } from "../../config/server";
-import type { FetchMethod } from "../../global.type";
-import type { PostType, PostTypeRequest, PostTypeResponse } from "./post.types";
+import { FetchMethods } from "../../global.type";
+import type { PostType, PostTypeRequest } from "./post.types";
 
 class Post {
-  private createUrl(params?: string) {
-    const url = params ? `${BASE_URL}/posts/${params}` : `${BASE_URL}/posts/`;
-    return url;
-  }
-
-  private async fetchData<T>(
-    url: string,
-    method?: FetchMethod,
-    post?: PostTypeRequest,
-    token?: string | null
-  ): Promise<T> {
-    let response;
-    if (!token) {
-      response = await fetch(url, {
-        method: method ? method : "GET",
-        body: post ? JSON.stringify(post) : undefined,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-    } else {
-      response = await fetch(url, {
-        method: method ? method : "GET",
-        body: post ? JSON.stringify(post) : undefined,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-    }
-    if (!response.ok) throw new Error(`${response.statusText}`);
-
-    return response.json();
-  }
 
   // Get all posts
-  async getPosts(): Promise<PostTypeResponse> {
-    const url = this.createUrl();
+  async getPosts({
+    page,
+    limit,
+  }: Record<string, number>): Promise<{ posts: PostType[]; hasMore: Boolean }> {
+    const res = await fetch(`${BASE_URL}/posts?page=${page}&limit=${limit}`);
+    const { posts, hasMore } = await res.json();
 
-    return this.fetchData<PostTypeResponse>(url);
+    return { posts, hasMore };
   }
 
   // get single post
-  async getSinglePost(slug: string): Promise<PostType> {
-    const url = this.createUrl(slug);
+  async getSinglePost(slug: string): Promise<{ post: PostType }> {
+     const res = await fetch(`${BASE_URL}/posts/${slug}`);
+    const { post } = await res.json();
 
-    return this.fetchData<PostType>(url);
+    return { post };
   }
 
   // create post
-  async createPost(post: PostTypeRequest, token: string | null): Promise<PostTypeResponse> {
-    const url = this.createUrl();
+  async createPost(
+    post: PostTypeRequest,
+    token: string | null
+  ): Promise<{ newPost: PostType }> {
+    const res = await fetch(`${BASE_URL}/posts/`, {
+      method: FetchMethods.POST,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(post),
+    });
+    const { newPost } = await res.json();
 
-    return this.fetchData<PostTypeResponse>(url, "POST", post, token);
+    return { newPost };
   }
 
   // delete post
-  async deletePost(postId: string): Promise<string> {
-    const url = this.createUrl(postId);
-    return this.fetchData<string>(url, "DELETE");
+  async deletePost(postId: string): Promise<{message:string}> {
+   const res = await fetch(`${BASE_URL}/posts/${postId}`,{method: FetchMethods.DELETE});
+    const { message } = await res.json();
+
+    return { message };
   }
 }
 

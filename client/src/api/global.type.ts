@@ -1,1 +1,5 @@
-export type  FetchMethod = 'GET'| 'POST' | 'DELETE'
+export const FetchMethods= {
+  GET :"GET",
+  POST :"POST",
+  DELETE :"DELETE",
+}
