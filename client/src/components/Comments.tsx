@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Comment from "./Comment";
 import { commentAPI } from "../api/model/comment/comment";
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth, useUser } from "@clerk/clerk-react";
 import type { CommentTypeRequest } from "../api/model/comment/comment.types";
 import { toast } from "react-toastify";
 import { useState, type FormEvent } from "react";
@@ -11,6 +11,7 @@ interface CommentsProps {
 }
 
 const Comments = ({ postId }: CommentsProps) => {
+  const { user } = useUser();
   const { getToken } = useAuth();
   const { isPending, error, data } = useQuery({
     queryKey: ["comments", postId],
@@ -81,10 +82,35 @@ const Comments = ({ postId }: CommentsProps) => {
           {addingComment ? "Adding..." : "Send"}
         </button>
       </form>
-      {comments &&
-        comments.length > 0 &&
-        !isPending &&
-        comments?.map((comment) => <Comment key={comment._id} comment={comment} />)}
+      {isPending ? (
+        "Loading..."
+      ) : error ? (
+        "Error loading comments!"
+      ) : (
+        <>
+          {addNewComment.isPending && (
+            <Comment
+              comment={{
+                desc: `${addNewComment.variables.desc} (Sending...)`,
+                createdAt: new Date().toUTCString(),
+                updatedAt: new Date().toUTCString(),
+                post: postId,
+                _id: "",
+                user: {
+                  _id: "",
+                  img: user?.imageUrl || "",
+                  username: user?.username || "",
+                },
+              }}
+              postId={postId}
+            />
+          )}
+
+          {comments?.map((comment) => (
+            <Comment key={comment._id} comment={comment} postId={postId} />
+          ))}
+        </>
+      )}
     </div>
   );
 };

@@ -37,6 +37,19 @@ const PostMenuActions = ({ post }: PostMenuActionsProps) => {
     },
   });
 
+  const featurePost = useMutation({
+    mutationFn: async () => {
+      const token = await getToken();
+      return postAPI.featurePost(token, post._id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["post", post.slug] });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
   const deletePost = useMutation({
     mutationFn: async () => {
       const token = await getToken();
@@ -63,7 +76,11 @@ const PostMenuActions = ({ post }: PostMenuActionsProps) => {
     deletePost.mutate();
   };
 
-const isAdmin = user?.publicMetadata?.role === 'admin' || false;
+  const handleFeature = () => {
+    featurePost.mutate();
+  };
+
+  const isAdmin = user?.publicMetadata?.role === "admin" || false;
 
   const savedPosts = data?.savedPosts;
   const isSaved = savedPosts?.includes(post._id);
@@ -90,17 +107,40 @@ const isAdmin = user?.publicMetadata?.role === 'admin' || false;
                   : isSaved
                   ? "fa-solid"
                   : "fa-regular"
-              } 
-              ${isSaved ? "fa-solid" : "fa-regular"}
+              }
                fa-bookmark`}
           ></i>
           <span>Save this post</span>
           {toggleSavePost.isPending && (
-            <span className="text-xs">In progress</span>
+            <span className="text-xs">(In progress)</span>
           )}
         </div>
       )}
-      {user && (post.user.username === user.username || isAdmin) &&  (
+      {isAdmin && (
+        <div
+          onClick={handleFeature}
+          className="flex items-center gap-2 py-2 text-sm cursor-pointer"
+        >
+          <i
+            className={`
+              ${
+                featurePost.isPending
+                  ? post.isFeatured
+                    ? "fa-regular"
+                    : "fa-solid"
+                  : post.isFeatured
+                  ? "fa-solid"
+                  : "fa-regular"
+              }
+               fa-star`}
+          ></i>
+          <span>Feature this post</span>
+          {featurePost.isPending && (
+            <span className="text-xs">(In progress)</span>
+          )}
+        </div>
+      )}
+      {user && (post.user.username === user.username || isAdmin) && (
         <div
           onClick={handleDelete}
           className="flex items-center gap-2 py-2 text-sm cursor-pointer"

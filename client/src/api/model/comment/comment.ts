@@ -32,8 +32,8 @@ class comment {
 
   // delete comment
   async deleteComment(
+    token: string|null,
     commentId: string,
-    token: string
   ): Promise<{ message: string }> {
     const res = await fetch(`${BASE_URL}/comments/${commentId}`, {
       method: FetchMethods.DELETE,

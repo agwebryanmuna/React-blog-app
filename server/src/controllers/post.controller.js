@@ -1,5 +1,6 @@
 import Post from "../models/post.model.js";
 import imagekit from "../config/imagekit.js";
+import { getAuth } from "@clerk/express";
 
 // GET ALL POSTS
 export const getPosts = async (req, res) => {
@@ -63,7 +64,7 @@ export const deletePost = async (req, res) => {
     _id: postId,
     user: userId,
   });
-  
+
   if (!deletedPost)
     return res.status(403).json("You can only delete your posts!");
 
@@ -73,6 +74,30 @@ export const deletePost = async (req, res) => {
     { $pull: { savedPosts: postId } }
   );
   res.status(200).json({ message: "Post has been deleted" });
+};
+
+// FEATURE POST
+export const featurePost = async (req, res) => {
+  const { sessionClaims } = getAuth(req);
+
+  const role = sessionClaims.metadata.role || "user";
+
+  if (role === "admin") {
+    const postId = req.body.postId;
+    const post = await Post.findById(postId);
+
+    if (!post) return res.status(404).json({ message: "Post not found!" });
+    const isFeatured = post.isFeatured;
+
+    const updatedPost = await Post.findByIdAndUpdate(
+      postId,
+      { isFeatured: !isFeatured },
+      { new: true }
+    );
+    return res.status(200).json({ updatedPost });
+  }
+
+  return res.status(403).json({ message: "You cannot feature post" });
 };
 
 // UPLOAD FILES

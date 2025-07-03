@@ -86,6 +86,24 @@ class Post {
 
     return { message };
   }
+
+  // FEATURE POST
+  async featurePost(
+    token: string | null,
+    postId: string
+  ): Promise<{ updatedPost: PostType}> {
+    const res = await fetch(`${BASE_URL}/posts/feature`, {
+      method: FetchMethods.PATCH,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({postId})
+    });
+    const { updatedPost } = await res.json();
+
+    return { updatedPost };
+  }
 }
 
 export const postAPI = new Post();
