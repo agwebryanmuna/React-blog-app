@@ -3,7 +3,6 @@ import { FetchMethods } from "../../global.type";
 import type { PostType, PostTypeRequest } from "./post.types";
 
 class Post {
-
   // Get all posts
   async getPosts({
     page,
@@ -17,7 +16,7 @@ class Post {
 
   // get single post
   async getSinglePost(slug: string): Promise<{ post: PostType }> {
-     const res = await fetch(`${BASE_URL}/posts/${slug}`);
+    const res = await fetch(`${BASE_URL}/posts/${slug}`);
     const { post } = await res.json();
 
     return { post };
@@ -41,9 +40,48 @@ class Post {
     return { newPost };
   }
 
+  // get saved posts
+  async getSavedPosts(token: string): Promise<{ savedPosts: [string] }> {
+    const res = await fetch(`${BASE_URL}/users/saved`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const { savedPosts } = await res.json();
+    return { savedPosts };
+  }
+
+  // save post
+  async toggleSavePost(
+    token: string | null,
+    postId: string
+  ): Promise<{ message: string }> {
+    const res = await fetch(`${BASE_URL}/users/save`, {
+      method: FetchMethods.PATCH,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ postId }),
+    });
+    const { message } = await res.json();
+
+    return { message };
+  }
+
   // delete post
-  async deletePost(postId: string): Promise<{message:string}> {
-   const res = await fetch(`${BASE_URL}/posts/${postId}`,{method: FetchMethods.DELETE});
+  async deletePost(
+    token: string | null,
+    postId: string
+  ): Promise<{ message: string }> {
+    const res = await fetch(`${BASE_URL}/posts/${postId}`, {
+      method: FetchMethods.DELETE,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
     const { message } = await res.json();
 
     return { message };

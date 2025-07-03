@@ -1,5 +1,6 @@
-export const FetchMethods= {
-  GET :"GET",
-  POST :"POST",
-  DELETE :"DELETE",
-}
+export const FetchMethods = {
+  GET: "GET",
+  POST: "POST",
+  DELETE: "DELETE",
+  PATCH: "PATCH",
+};

@@ -1,6 +1,7 @@
 import { useAuth, useUser } from "@clerk/clerk-react";
 import "react-quill-new/dist/quill.snow.css";
 import ReactQuill from "react-quill-new";
+import DOMPurify from "dompurify";
 
 import type { PostTypeRequest } from "../api/model/post/post.types";
 import { useEffect, useState, type FormEvent } from "react";
@@ -33,6 +34,8 @@ const Write = () => {
       toast.success("Post has been created successfully!");
 
       // navigate user to post page
+      console.log("slug for the new post: ", newPost.slug);
+
       navigate(`/posts/${newPost.slug}`);
       setValue("");
       setCover("");

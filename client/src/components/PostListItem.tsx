@@ -31,11 +31,11 @@ const PostListItem = ({ post }: PostListItemProp) => {
         <div className="flex items-center gap-2 text-gray-400 text-sm">
           <span>Written by</span>
           <Link to={postPath} className="text-blue-500">
-            John Doe
+            {post.user.username}
           </Link>
           <span>on</span>
           <Link to={postPath} className="text-blue-500">
-            Web Design
+            {post.category}
           </Link>
           <span>{format(post.createdAt)}</span>
         </div>

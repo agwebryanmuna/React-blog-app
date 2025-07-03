@@ -10,7 +10,7 @@ export interface PostTypeRequest {
 
 export interface PostType {
       _id: string;
-      user: string;
+      user: {_id:string, username:string, img?:string};
       img: string;
       title: string;
       slug: string;

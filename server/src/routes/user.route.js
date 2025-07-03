@@ -1,7 +1,10 @@
-import express from 'express';
+import express from "express";
+import authMiddleware from "../middleware/authMiddleware.js";
+import { getUserSavedPosts, savePost } from "../controllers/user.controller.js";
 
-const userRouter = express.Router()
+const userRouter = express.Router();
 
-userRouter.get('/register', (req, res)=>{res.send('User registered successfully!')})
+userRouter.get("/saved", authMiddleware, getUserSavedPosts);
+userRouter.patch("/save", authMiddleware, savePost);
 
-export default userRouter
+export default userRouter;

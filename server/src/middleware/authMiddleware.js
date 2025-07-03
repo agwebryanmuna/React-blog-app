@@ -9,6 +9,7 @@ const authMiddleware = async (req, res, next) => {
   const user = await User.findOne({ clerkUserId });
 
   if (!user) return res.status(404).json("User not found!");
+
   req.user = user;
   next();
 };
