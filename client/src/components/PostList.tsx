@@ -3,8 +3,11 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { postAPI } from "../api/model/post/post";
 import Loader from "./commons/Loader";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useSearchParams } from "react-router";
 
 const PostList = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const {
     data,
     error,
@@ -14,9 +17,9 @@ const PostList = () => {
     isFetchingNextPage,
     status,
   } = useInfiniteQuery({
-    queryKey: ["posts"],
+    queryKey: ["posts", searchParams.toString()],
     queryFn: async ({ pageParam = 1 }) =>
-      postAPI.getPosts({ page: pageParam, limit: 2 }),
+      postAPI.getPosts( pageParam,  10, searchParams ),
     initialPageParam: 1,
     getNextPageParam: (lastPage, pages) => {
       return lastPage.hasMore ? pages.length + 1 : undefined;
@@ -45,7 +48,7 @@ const PostList = () => {
         <PostListItem key={post.slug} post={post} />
       ))}
     </InfiniteScroll>
-);
+  );
 };
 
 export default PostList;

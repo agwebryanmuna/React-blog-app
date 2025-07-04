@@ -4,6 +4,7 @@ import SideMenu from "../components/SideMenu";
 
 const PostsList = () => {
   const [open, setOpen] = useState(false);
+  
 
   return (
     <div>

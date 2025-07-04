@@ -4,11 +4,18 @@ import type { PostType, PostTypeRequest } from "./post.types";
 
 class Post {
   // Get all posts
-  async getPosts({
-    page,
-    limit,
-  }: Record<string, number>): Promise<{ posts: PostType[]; hasMore: Boolean }> {
-    const res = await fetch(`${BASE_URL}/posts?page=${page}&limit=${limit}`);
+  async getPosts(
+    page: number,
+    limit: number,
+    searchParams: URLSearchParams
+  ): Promise<{ posts: PostType[]; hasMore: Boolean }> {
+    const searchParamsObj = new URLSearchParams(
+     Object.fromEntries([...searchParams])
+    ).toString();
+
+    const res = await fetch(
+      `${BASE_URL}/posts?page=${page}&limit=${limit}&${searchParamsObj}`
+    );
     const { posts, hasMore } = await res.json();
 
     return { posts, hasMore };
@@ -91,14 +98,14 @@ class Post {
   async featurePost(
     token: string | null,
     postId: string
-  ): Promise<{ updatedPost: PostType}> {
+  ): Promise<{ updatedPost: PostType }> {
     const res = await fetch(`${BASE_URL}/posts/feature`, {
       method: FetchMethods.PATCH,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({postId})
+      body: JSON.stringify({ postId }),
     });
     const { updatedPost } = await res.json();
 

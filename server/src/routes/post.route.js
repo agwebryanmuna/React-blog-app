@@ -9,12 +9,13 @@ import {
 } from "../controllers/post.controller.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 import { postAdminMiddleware } from "../middleware/adminMiddleware.js";
+import { increaseVisit } from "../middleware/increaseVisit.js";
 
 const postRouter = express.Router();
 
 postRouter.get("/", getPosts);
 postRouter.get("/upload-files", authMiddleware, uploadFiles);
-postRouter.get("/:slug", getPost);
+postRouter.get("/:slug", increaseVisit, getPost);
 postRouter.post("/", authMiddleware, createPost);
 postRouter.delete("/:id", postAdminMiddleware, authMiddleware, deletePost);
 postRouter.patch("/feature", featurePost);

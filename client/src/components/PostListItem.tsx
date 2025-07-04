@@ -30,11 +30,11 @@ const PostListItem = ({ post }: PostListItemProp) => {
         </Link>
         <div className="flex items-center gap-2 text-gray-400 text-sm">
           <span>Written by</span>
-          <Link to={postPath} className="text-blue-500">
+          <Link to={`/posts?author=${post.user.username}`} className="text-blue-500">
             {post.user.username}
           </Link>
           <span>on</span>
-          <Link to={postPath} className="text-blue-500">
+          <Link to={`/posts?cat=${post.category}`} className="text-blue-500">
             {post.category}
           </Link>
           <span>{format(post.createdAt)}</span>
