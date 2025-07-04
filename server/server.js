@@ -3,7 +3,7 @@ import express from "express";
 import cors from "cors";
 import compression from "compression";
 import helmet from "helmet";
-import { corsOptions } from "./src/config/cors.config.js";
+import corsOptions from "./src/config/cors.config.js";
 import userRouter from "./src/routes/user.route.js";
 import postRouter from "./src/routes/post.route.js";
 import commentRouter from "./src/routes/comment.route.js";
@@ -11,6 +11,7 @@ import connectDb from "./src/config/db.config.js";
 import webhookRouter from "./src/routes/webhook.route.js";
 import { clerkMiddleware } from "@clerk/express";
 import { globalLimiter } from "./src/middleware/rateLimitMiddleware.js";
+import logger from "./src/logger/logger.js";
 
 const app = express();
 
@@ -31,7 +32,7 @@ app.use(globalLimiter);
 // middleware
 app.use(express.json());
 // app.use(cors(corsOptions))
-app.use(cors());
+app.use(cors(corsOptions));
 // compress all responses
 app.use(compression());
 // secure http response headers
@@ -49,6 +50,7 @@ app.get("/", (_, res) => {
 // Error handler. Must be defined last after other app.use.
 app.use((err, req, res, next) => {
   console.error(err);
+  logger.error(`${err.name}: ${err.status} - ${err.message}`);
   res.status(err.status || 500).json({
     status: err.status,
     message: err.message || "Something went wrong!",

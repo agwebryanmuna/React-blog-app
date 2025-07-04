@@ -25,7 +25,8 @@
     "mongoose": "^8.16.1",
     "rate-limit-redis": "^4.2.1",
     "redis": "^5.5.6",
-    "svix": "^1.68.0"
+    "svix": "^1.68.0",
+    "winston": "^3.17.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"

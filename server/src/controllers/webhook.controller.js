@@ -1,5 +1,6 @@
 import { Webhook } from "svix";
 import User from "../models/user.model.js";
+import logger from "../logger/logger.js";
 
 export const clerkWebHook = async (req, res) => {
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
@@ -33,5 +34,6 @@ export const clerkWebHook = async (req, res) => {
     });
   }
 
+  logger.info(`User Created: ${clerkUserId}`)
   return res.status(200).json({ message: "Webhook received" });
 };
