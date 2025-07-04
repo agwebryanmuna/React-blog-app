@@ -5,7 +5,7 @@ import {
   createPost,
   deletePost,
   uploadFiles,
-  featurePost
+  featurePost,
 } from "../controllers/post.controller.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 import { postAdminMiddleware } from "../middleware/adminMiddleware.js";
@@ -15,7 +15,7 @@ import { postLimiter } from "../middleware/rateLimitMiddleware.js";
 const postRouter = express.Router();
 
 // limit access to server
-postRouter.use(postLimiter())
+postRouter.use(postLimiter);
 
 postRouter.get("/", getPosts);
 

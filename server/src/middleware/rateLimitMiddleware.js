@@ -1,10 +1,15 @@
 import rateLimit from "express-rate-limit";
-import redisClient from "../config/redis.config";
+import redisClient from "../config/redis.config.js";
+import RedisStore from "rate-limit-redis";
+
+const createRedisStore = (prefix) =>
+  new RedisStore({
+    sendCommand: (...args) => redisClient.sendCommand(args),
+    prefix,
+  });
 
 export const globalLimiter = rateLimit({
-  store: new RedisStore({
-    sendCommand: (...args) => redisClient.call(...args),
-  }),
+  store: createRedisStore("rl:global"),
   windowMs: 15 * 60 * 1000, // 15 min
   max: 200, // Allow 200 requests per IP per 15 min
   standardHeaders: true,
@@ -12,9 +17,7 @@ export const globalLimiter = rateLimit({
 });
 
 export const commentLimiter = rateLimit({
-  store: new RedisStore({
-    sendCommand: (...args) => redisClient.call(...args),
-  }),
+  store: createRedisStore("rl:comments"),
   windowMs: 10 * 60 * 1000, // 10 minutes
   max: 10, // Max 10 comments per user every 10 minutes
   keyGenerator: (req) => req.auth?.userId || req.ip,
@@ -24,23 +27,19 @@ export const commentLimiter = rateLimit({
 });
 
 export const postLimiter = rateLimit({
-  store: new RedisStore({
-    sendCommand: (...args) => redisClient.call(...args),
-  }),
+  store: createRedisStore("rl:posts"),
   windowMs: 10 * 60 * 1000, // 10 minutes
   keyGenerator: (req) => req.auth?.userId || req.ip,
-  message: 'Accessed the server too many times. Please wait a bit',
+  message: "Accessed the server too many times. Please wait a bit",
   standardHeaders: true,
   legacyHeaders: false,
 });
 
 export const userLimiter = rateLimit({
-  store: new RedisStore({
-    sendCommand: (...args) => redisClient.call(...args),
-  }),
+  store: createRedisStore("rl:users"),
   windowMs: 10 * 60 * 1000, // 10 minutes
   keyGenerator: (req) => req.auth?.userId || req.ip,
-  message: 'Accessed the server too many times. Please wait a bit',
+  message: "Accessed the server too many times. Please wait a bit",
   standardHeaders: true,
   legacyHeaders: false,
 });
