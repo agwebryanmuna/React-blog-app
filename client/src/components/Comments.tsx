@@ -5,6 +5,7 @@ import { useAuth, useUser } from "@clerk/clerk-react";
 import type { CommentTypeRequest } from "../api/model/comment/comment.types";
 import { toast } from "react-toastify";
 import { useState, type FormEvent } from "react";
+import { useNavigate } from "react-router";
 
 interface CommentsProps {
   postId: string;
@@ -13,6 +14,8 @@ interface CommentsProps {
 const Comments = ({ postId }: CommentsProps) => {
   const { user } = useUser();
   const { getToken } = useAuth();
+  const navigate = useNavigate();
+
   const { isPending, error, data } = useQuery({
     queryKey: ["comments", postId],
     queryFn: async () => commentAPI.getComments(postId || ""),
@@ -39,6 +42,11 @@ const Comments = ({ postId }: CommentsProps) => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!user) {
+      navigate("/login");
+      return;
+    }
     setAddingComment(true);
 
     const formData = new FormData(e.currentTarget);

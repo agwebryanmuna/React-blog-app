@@ -14,18 +14,15 @@ import { postLimiter } from "../middleware/rateLimitMiddleware.js";
 
 const postRouter = express.Router();
 
-// limit access to server
-postRouter.use(postLimiter);
-
 postRouter.get("/", getPosts);
 
-postRouter.get("/upload-files", authMiddleware, uploadFiles);
+postRouter.get("/upload-files",postLimiter, authMiddleware, uploadFiles);
 
 postRouter.get("/:slug", increaseVisit, getPost);
 
-postRouter.post("/", authMiddleware, createPost);
+postRouter.post("/", authMiddleware,postLimiter, createPost);
 
-postRouter.delete("/:id", postAdminMiddleware, authMiddleware, deletePost);
+postRouter.delete("/:id", postAdminMiddleware, authMiddleware,postLimiter, deletePost);
 
 postRouter.patch("/feature", featurePost);
 

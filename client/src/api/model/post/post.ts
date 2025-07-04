@@ -25,8 +25,6 @@ class Post {
   async getFeaturedPosts(
     limit: number,
   ): Promise<{ posts: PostType[]; hasMore: Boolean }> {
-
-
     const res = await fetch(
       `${BASE_URL}/posts?featured=true&limit=${limit}&sort=newest`
     );

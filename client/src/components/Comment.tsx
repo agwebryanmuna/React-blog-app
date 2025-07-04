@@ -5,6 +5,7 @@ import { useAuth, useUser } from "@clerk/clerk-react";
 import { commentAPI } from "../api/model/comment/comment";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 
 interface CommentProps {
   comment: CommentType;
@@ -14,6 +15,7 @@ interface CommentProps {
 const Comment = ({ comment, postId }: CommentProps) => {
   const { user } = useUser();
   const { getToken } = useAuth();
+  const navigate = useNavigate();
 
   const queryClient = useQueryClient();
 
@@ -32,6 +34,9 @@ const Comment = ({ comment, postId }: CommentProps) => {
   });
 
   const handleDelete = () => {
+    if (!user) {
+      navigate("/login");
+    }
     deleteComment.mutate();
   };
 

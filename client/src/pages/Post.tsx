@@ -18,7 +18,12 @@ const Post = () => {
     queryFn: async () => postAPI.getSinglePost(slug || ""),
   });
 
-  if (isPending) return <Loader />;
+  if (isPending)
+    return (
+      <div className="w-full flex items-center justify-center">
+        <Loader />
+      </div>
+    );
 
   if (error) {
     console.log(error);
@@ -96,7 +101,10 @@ const Post = () => {
                   height={48}
                 />
               )}
-              <Link to={"/test"} className="text-blue-800">
+              <Link
+                to={`/posts?author=${post.user.username}`}
+                className="text-blue-800"
+              >
                 {post?.user.username}
               </Link>
             </div>
@@ -104,10 +112,10 @@ const Post = () => {
               Lorem ipsum dolor, sit amet consectetur adipisicing elit.
             </p>
             <div className="flex gap-2">
-              <Link to={"/test"}>
+              <Link to={"https://google.com"} target="_blank">
                 <Image src="/facebook.svg" width={25} height={25} />
               </Link>
-              <Link to={"/test"}>
+              <Link to={"https://google.com"} target="_blank">
                 <Image src="/instagram.svg" width={25} height={25} />
               </Link>
             </div>
@@ -115,22 +123,22 @@ const Post = () => {
           <PostMenuActions post={post} />
           <h1 className="mt-8 mb-4 text-sm font-medium">Categories</h1>
           <div className="flex flex-col gap-2 text-sm">
-            <Link to={"/tes"} className="underline">
+            <Link to={"/posts"} className="underline">
               All
             </Link>
-            <Link to={"/tes"} className="underline">
+            <Link to={"/posts?cat=web-design"} className="underline">
               Web Design
             </Link>
-            <Link to={"/tes"} className="underline">
+            <Link to={"/posts?cat=development"} className="underline">
               Development
             </Link>
-            <Link to={"/tes"} className="underline">
+            <Link to={"/posts?cat=databases"} className="underline">
               Databses
             </Link>
-            <Link to={"/tes"} className="underline">
+            <Link to={"/posts?cat=seo"} className="underline">
               Search Engines
             </Link>
-            <Link to={"/tes"} className="underline">
+            <Link to={"/posts?cat=marketing"} className="underline">
               Marketing
             </Link>
           </div>

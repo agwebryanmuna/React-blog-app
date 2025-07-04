@@ -7,12 +7,10 @@ const userRouter = express.Router();
 
 userRouter.use(authMiddleware);
 
-userRouter.use(userLimiter);
-
 // get user's saved posts
 userRouter.get("/saved", getUserSavedPosts);
 
 //  save a post
-userRouter.patch("/save", savePost);
+userRouter.patch("/save",userLimiter, savePost);
 
 export default userRouter;

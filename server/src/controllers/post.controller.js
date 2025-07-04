@@ -67,7 +67,7 @@ export const getPosts = async (req, res) => {
   // Create cache per-page and per-query variation
   const key = `posts:page:${page}:sort:${JSON.stringify(
     sortObj
-  )}:query:${JSON.stringify(query)}`; 
+  )}:query:${JSON.stringify(query)}`;
 
   // Try to fetch from Redis
   const cached = await redisClient.get(key);
@@ -88,7 +88,7 @@ export const getPosts = async (req, res) => {
   const responseData = { posts, hasMore };
 
   // Cache the result (set TTL to e.g. 120 seconds)
-  await redisClient.setex(key, 120, JSON.stringify(responseData));
+  await redisClient.setEx(key, 120, JSON.stringify(responseData));
 
   res.status(200).json(responseData);
 };
@@ -96,20 +96,20 @@ export const getPosts = async (req, res) => {
 // GET SINGLE POST
 export const getPost = async (req, res) => {
   const { slug } = req.params;
-  const key = `post:${slug}`; 
+  const key = `post:${slug}`;
 
   // Try to fetch from Redis
   const cached = await redisClient.get(key);
   if (cached) {
     return res.json(JSON.parse(cached));
   }
-  
+
   const post = await Post.findOne({ slug }).populate("user", [
     "username",
     "img",
   ]);
 
-  await redisClient.setex(key, 120, JSON.stringify({post}));
+  await redisClient.setEx(key, 120, JSON.stringify({ post }));
 
   res.status(200).json({ post });
 };
@@ -147,7 +147,7 @@ export const createPost = async (req, res) => {
 export const deletePost = async (req, res) => {
   const { id: postId } = req.params;
   const { _id: userId } = req.user;
-  const {slug} = req.body
+  const { slug } = req.body;
 
   const deletedPost = await Post.findOneAndDelete({
     _id: postId,
@@ -164,7 +164,7 @@ export const deletePost = async (req, res) => {
   );
 
   // delete post from redis cache
-  await redisClient.del(`post:${slug}`)
+  await redisClient.del(`post:${slug}`);
 
   res.status(200).json({ message: "Post has been deleted" });
 };
