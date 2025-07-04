@@ -10,9 +10,13 @@ import commentRouter from "./src/routes/comment.route.js";
 import connectDb from "./src/config/db.config.js";
 import webhookRouter from "./src/routes/webhook.route.js";
 import { clerkMiddleware } from '@clerk/express'
+import { globalLimiter } from "./src/middleware/rateLimitMiddleware.js";
 
 
 const app = express();
+
+// connect db
+await connectDb()
 
 // checks the request cookies and headers for session JWT
 // If found, attaches the Auth object to the request under the auth key
@@ -22,6 +26,9 @@ app.use(clerkMiddleware())
 // thus this position.
 app.use('/api/webhooks', webhookRouter)
 
+// global limiter
+app.use(globalLimiter())
+
 // middleware
 app.use(express.json());
 // app.use(cors(corsOptions))
@@ -30,9 +37,6 @@ app.use(cors())
 app.use(compression());
 // secure http response headers
 app.use(helmet());
-
-// connect db
-await connectDb()
 
 // endpoints
 app.use('/api/users', userRouter)
