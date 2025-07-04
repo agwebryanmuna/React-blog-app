@@ -17,8 +17,6 @@ const FeaturedPosts = () => {
   if (isPending) return <Loader />;
 
   if (error) {
-    console.log(error);
-
     return (
       <div>
         Something went wrong! See other{" "}

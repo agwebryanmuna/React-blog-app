@@ -39,12 +39,7 @@ const PostList = () => {
     );
 
   if (error) {
-    console.log(error);
-    return (
-      <div className="mb-12">
-        Something went wrong! Please refresh the page.
-      </div>
-    );
+    return <div>Something went wrong! See other. Please refresh the page.</div>;
   }
 
   const allPosts = data?.pages?.flatMap((page) => page.posts) || [];

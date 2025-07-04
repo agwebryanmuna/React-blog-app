@@ -65,7 +65,9 @@ const Comments = ({ postId }: CommentsProps) => {
   };
 
   if (error) {
-    console.log(error);
+    return (
+      <div>Couldn't fetch comments for this post. Please refresh the page.</div>
+    );
   }
 
   const comments = data?.comments;

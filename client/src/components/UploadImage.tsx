@@ -34,9 +34,6 @@ const authenticator = async (clerkToken: string | null) => {
     return { signature, expire, token, publicKey };
   } catch (error) {
     // Log the original error for debugging before rethrowing a new error.
-    console.error("Authentication error:", error);
-    console.log("token", clerkToken);
-
     throw new Error("Authentication request failed");
   }
 };
@@ -73,8 +70,7 @@ const UploadImage = ({ children, setData, setProgress }: UploadImageProps) => {
       authParams = await authenticator(token);
     } catch (authError: any) {
       setIsUploading(false);
-      console.log(authError);
-
+      toast.error("Sorry, could not upload image.");
       return;
     }
     const { signature, expire, token, publicKey } = authParams;
@@ -97,24 +93,21 @@ const UploadImage = ({ children, setData, setProgress }: UploadImageProps) => {
     } catch (error) {
       // Handle specific error types provided by the ImageKit SDK.
       if (error instanceof ImageKitAbortError) {
-        console.error("Upload aborted:", error.reason);
-
-        toast.error("Upload aborted!");
+        toast.error("Upload aborted");
       } else if (error instanceof ImageKitInvalidRequestError) {
-        console.error("Invalid request:", error.message);
+        toast.error("Invalid request");
 
         toast.error(error.message);
       } else if (error instanceof ImageKitUploadNetworkError) {
-        console.error("Network error:", error.message);
+        toast.error("Network error");
 
         toast.error("Upload failed! Please check your internet connection.");
       } else if (error instanceof ImageKitServerError) {
-        console.error("Server error:", error.message);
+        toast.error("Server error");
 
         toast.error("Upload failed! Server had some issues.");
       } else {
         // Handle any other errors that may occur.
-        console.error("Upload error:", error);
 
         toast.error("Could not upload image. Please try again.");
       }

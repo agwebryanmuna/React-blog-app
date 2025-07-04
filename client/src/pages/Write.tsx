@@ -34,8 +34,6 @@ const Write = () => {
       toast.success("Post has been created successfully!");
 
       // navigate user to post page
-      console.log("slug for the new post: ", newPost.slug);
-
       navigate(`/posts/${newPost.slug}`);
       setValue("");
       setCover("");
