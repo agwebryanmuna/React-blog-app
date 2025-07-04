@@ -2,6 +2,7 @@ import Post from "../models/post.model.js";
 import imagekit from "../config/imagekit.js";
 import { getAuth } from "@clerk/express";
 import User from "../models/user.model.js";
+import redisClient from "../config/redis.config.js";
 
 // GET ALL POSTS
 export const getPosts = async (req, res) => {
@@ -59,8 +60,19 @@ export const getPosts = async (req, res) => {
     }
   }
 
-  if(featured) {
+  if (featured) {
     query.isFeatured = true;
+  }
+
+  // Create cache per-page and per-query variation
+  const key = `posts:page:${page}:sort:${JSON.stringify(
+    sortObj
+  )}:query:${JSON.stringify(query)}`; 
+
+  // Try to fetch from Redis
+  const cached = await redisClient.get(key);
+  if (cached) {
+    return res.json(JSON.parse(cached));
   }
 
   // get posts from db with 'limit' and skip pages based on limit => limit = 5, skip 5 posts for next page
@@ -73,16 +85,32 @@ export const getPosts = async (req, res) => {
   const totalPosts = await Post.countDocuments();
   const hasMore = page * limit < totalPosts;
 
-  res.status(200).json({ posts, hasMore });
+  const responseData = { posts, hasMore };
+
+  // Cache the result (set TTL to e.g. 120 seconds)
+  await redisClient.setex(key, 120, JSON.stringify(responseData));
+
+  res.status(200).json(responseData);
 };
 
 // GET SINGLE POST
 export const getPost = async (req, res) => {
   const { slug } = req.params;
+  const key = `post:${slug}`; 
+
+  // Try to fetch from Redis
+  const cached = await redisClient.get(key);
+  if (cached) {
+    return res.json(JSON.parse(cached));
+  }
+  
   const post = await Post.findOne({ slug }).populate("user", [
     "username",
     "img",
   ]);
+
+  await redisClient.setex(key, 120, JSON.stringify({post}));
+
   res.status(200).json({ post });
 };
 
@@ -94,10 +122,10 @@ export const createPost = async (req, res) => {
   let slug = req.body.title
     .trim()
     .toLowerCase()
-    .normalize("NFKD")                     
-    .replace(/[\u0300-\u036f]/g, '')       
-    .replace(/[^a-z0-9]+/g, '-')           
-    .replace(/^-+|-+$/g, ''); 
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 
   let existingSlug = await Post.find({ slug });
 
@@ -119,6 +147,7 @@ export const createPost = async (req, res) => {
 export const deletePost = async (req, res) => {
   const { id: postId } = req.params;
   const { _id: userId } = req.user;
+  const {slug} = req.body
 
   const deletedPost = await Post.findOneAndDelete({
     _id: postId,
@@ -133,6 +162,10 @@ export const deletePost = async (req, res) => {
     { savedPosts: postId },
     { $pull: { savedPosts: postId } }
   );
+
+  // delete post from redis cache
+  await redisClient.del(`post:${slug}`)
+
   res.status(200).json({ message: "Post has been deleted" });
 };
 

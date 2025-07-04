@@ -94,7 +94,7 @@ class Post {
   // delete post
   async deletePost(
     token: string | null,
-    postId: string
+    postId: string, slug:string
   ): Promise<{ message: string }> {
     const res = await fetch(`${BASE_URL}/posts/${postId}`, {
       method: FetchMethods.DELETE,
@@ -102,6 +102,7 @@ class Post {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify({slug})
     });
     const { message } = await res.json();
 

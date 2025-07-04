@@ -32,8 +32,9 @@ class comment {
 
   // delete comment
   async deleteComment(
-    token: string|null,
+    token: string | null,
     commentId: string,
+    postId: string
   ): Promise<{ message: string }> {
     const res = await fetch(`${BASE_URL}/comments/${commentId}`, {
       method: FetchMethods.DELETE,
@@ -41,6 +42,7 @@ class comment {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify({ postId }),
     });
     const { message } = await res.json();
 

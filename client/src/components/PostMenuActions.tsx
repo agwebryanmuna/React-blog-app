@@ -53,7 +53,7 @@ const PostMenuActions = ({ post }: PostMenuActionsProps) => {
   const deletePost = useMutation({
     mutationFn: async () => {
       const token = await getToken();
-      return postAPI.deletePost(token, post._id);
+      return postAPI.deletePost(token, post._id, post.slug);
     },
     onSuccess: () => {
       // queryClient.invalidateQueries({queryKey:['posts']})

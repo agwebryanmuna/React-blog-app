@@ -20,7 +20,7 @@ const Comment = ({ comment, postId }: CommentProps) => {
   const deleteComment = useMutation({
     mutationFn: async () => {
       const token = await getToken();
-      return commentAPI.deleteComment(token, comment._id);
+      return commentAPI.deleteComment(token, comment._id, postId);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["comments", postId] });
