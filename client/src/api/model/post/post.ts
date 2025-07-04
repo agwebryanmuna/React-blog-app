@@ -21,6 +21,20 @@ class Post {
     return { posts, hasMore };
   }
 
+  // Get all posts
+  async getFeaturedPosts(
+    limit: number,
+  ): Promise<{ posts: PostType[]; hasMore: Boolean }> {
+
+
+    const res = await fetch(
+      `${BASE_URL}/posts?featured=true&limit=${limit}&sort=newest`
+    );
+    const { posts, hasMore } = await res.json();
+
+    return { posts, hasMore };
+  }
+
   // get single post
   async getSinglePost(slug: string): Promise<{ post: PostType }> {
     const res = await fetch(`${BASE_URL}/posts/${slug}`);

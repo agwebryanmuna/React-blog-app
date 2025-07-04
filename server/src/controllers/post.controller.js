@@ -59,6 +59,10 @@ export const getPosts = async (req, res) => {
     }
   }
 
+  if(featured) {
+    query.isFeatured = true;
+  }
+
   // get posts from db with 'limit' and skip pages based on limit => limit = 5, skip 5 posts for next page
   const posts = await Post.find(query)
     .populate("user", "username")

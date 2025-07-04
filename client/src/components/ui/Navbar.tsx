@@ -9,9 +9,9 @@ const Navbar = () => {
   // navbar links
   const navLinks: Record<string, string>[] = [
     { path: "/", name: "Home" },
-    { path: "/trending", name: "Trending" },
-    { path: "/most-popular", name: "Most Popular" },
-    { path: "/about", name: "About" },
+    { path: "/posts?sort=trending", name: "Trending" },
+    { path: "/posts?sort=most-popular", name: "Most Popular" },
+    { path: "/", name: "About" },
   ];
 
   return (
