@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ToastContainer } from "react-toastify";
 import { useUser } from "@clerk/clerk-react";
 import React from "react";
+import NotFound from "./pages/NotFound";
 
 const Home = React.lazy(() => import("./pages/Home"));
 const PostsList = React.lazy(() => import("./pages/PostList"));
@@ -30,6 +31,7 @@ const App = () => {
             />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
           <ToastContainer position="bottom-right" />
         </Layout>
