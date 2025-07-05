@@ -41,7 +41,10 @@ const FeaturedPosts = () => {
         {/* DETAILS */}
         <div className="flex items-center gap-4">
           <h1 className="font-semibold lg:text-lg">01.</h1>
-          <Link to="/" className="text-blue-800 lg:text-lg">
+          <Link
+            to={`/posts?cat=${posts[0].category}`}
+            className="text-blue-800 lg:text-lg"
+          >
             {posts[0].category}
           </Link>
           <span className="text-gray-500">{format(posts[0].createdAt)}</span>
@@ -73,7 +76,10 @@ const FeaturedPosts = () => {
               {/* details */}
               <div className="flex items-center gap-4 text-sm lg:text-base">
                 <h2 className="font-semibold">02.</h2>
-                <Link to="/" className="text-blue-800">
+                <Link
+                  to={`/posts?cat=${posts[1].category}`}
+                  className="text-blue-800"
+                >
                   {posts[1].category}
                 </Link>
                 <span className="text-gray-500 text-sm">
@@ -106,7 +112,10 @@ const FeaturedPosts = () => {
               {/* details */}
               <div className="flex items-center gap-4 text-sm lg:text-base">
                 <h2 className="font-semibold">03.</h2>
-                <Link to="/" className="text-blue-800">
+                <Link
+                  to={`/posts?cat=${posts[2].category}`}
+                  className="text-blue-800"
+                >
                   {posts[2].category}
                 </Link>
                 <span className="text-gray-500 text-sm">
@@ -139,7 +148,10 @@ const FeaturedPosts = () => {
               {/* details */}
               <div className="flex items-center gap-4 text-sm lg:text-base">
                 <h2 className="font-semibold">04.</h2>
-                <Link to="/" className="text-blue-800">
+                <Link
+                  to={`/posts?cat=${posts[3].category}`}
+                  className="text-blue-800"
+                >
                   {posts[3].category}
                 </Link>
                 <span className="text-gray-500 text-sm">
