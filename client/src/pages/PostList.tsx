@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import PostList from "../components/PostList";
-import SideMenu from "../components/SideMenu";
+
+const PostList = React.lazy(() => import("../components/PostList"));
+const SideMenu = React.lazy(() => import("../components/SideMenu"));
 
 const PostsList = () => {
   const [open, setOpen] = useState(false);
-  
 
   return (
     <div>
@@ -19,7 +19,7 @@ const PostsList = () => {
         <div className="">
           <PostList />
         </div>
-        <div className={`${open?'block': 'hidden'} md:block`}>
+        <div className={`${open ? "block" : "hidden"} md:block`}>
           <SideMenu />
         </div>
       </div>

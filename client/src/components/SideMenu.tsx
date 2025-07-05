@@ -1,10 +1,11 @@
+import type React from "react";
 import Search from "./commons/Search";
-import { Link, useSearchParams } from "react-router";
+import { useSearchParams } from "react-router";
 
 const SideMenu = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const handleFilterChange = (e) => {
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (searchParams.get("sort") !== e.target.value) {
       setSearchParams({
         ...Object.fromEntries(searchParams.entries()),

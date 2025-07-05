@@ -1,7 +1,9 @@
 import { Link } from "react-router";
 import MainCategories from "../components/MainCategories";
-import FeaturedPosts from "../components/FeaturedPosts";
-import PostList from "../components/PostList";
+import React from "react";
+
+const FeaturedPosts = React.lazy(() => import("../components/FeaturedPosts"));
+const PostList = React.lazy(() => import("../components/PostList"));
 
 const Home = () => {
   return (

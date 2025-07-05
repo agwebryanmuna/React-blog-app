@@ -1,14 +1,16 @@
 import { Route, Routes, BrowserRouter, Navigate } from "react-router";
-import Home from "./pages/Home";
-import Post from "./pages/Post";
-import PostsList from "./pages/PostList";
-import Write from "./pages/Write";
-import Register from "./pages/Register";
-import Login from "./pages/Login";
 import Layout from "./components/Layout";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ToastContainer } from "react-toastify";
 import { useUser } from "@clerk/clerk-react";
+import React from "react";
+
+const Home = React.lazy(() => import("./pages/Home"));
+const PostsList = React.lazy(() => import("./pages/PostList"));
+const Post = React.lazy(() => import("./pages/Post"));
+const Write = React.lazy(() => import("./pages/Write"));
+const Register = React.lazy(() => import("./pages/Register"));
+const Login = React.lazy(() => import("./pages/Login"));
 
 const queryClient = new QueryClient();
 

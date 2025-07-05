@@ -4,11 +4,13 @@ import parse from "html-react-parser";
 import Image from "../components/commons/Image";
 import PostMenuActions from "../components/PostMenuActions";
 import Search from "../components/commons/Search";
-import Comments from "../components/Comments";
 import { useQuery } from "@tanstack/react-query";
 import { postAPI } from "../api/model/post/post";
 import Loader from "../components/commons/Loader";
 import { format } from "timeago.js";
+import React from "react";
+
+const Comments = React.lazy(() => import("../components/Comments"));
 
 const Post = () => {
   const { slug } = useParams();
