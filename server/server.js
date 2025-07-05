@@ -3,7 +3,6 @@ import express from "express";
 import cors from "cors";
 import compression from "compression";
 import helmet from "helmet";
-import corsOptions from "./src/config/cors.config.js";
 import userRouter from "./src/routes/user.route.js";
 import postRouter from "./src/routes/post.route.js";
 import commentRouter from "./src/routes/comment.route.js";
@@ -32,7 +31,7 @@ app.use(globalLimiter);
 // middleware
 app.use(express.json());
 // app.use(cors(corsOptions))
-app.use(cors(corsOptions));
+app.use(cors());
 // compress all responses
 app.use(compression());
 // secure http response headers
