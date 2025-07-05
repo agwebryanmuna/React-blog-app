@@ -1,54 +1,75 @@
-# React + TypeScript + Vite
+# React Blog App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![App Screenshot](./screenshot/screenshot.png)
 
-Currently, two official plugins are available:
+## 🚀 Demo
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-View%20Site-brightgreen?style=for-the-badge)](https://site.com)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 📝 Overview
+Welcome to the **React Blog App**! This is a modern, full-stack blogging platform designed for seamless content creation, sharing, and discovery. Built with a focus on performance, security, and user experience, this project demonstrates my skills in both frontend and backend development using the latest technologies.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## 🛠️ Tech Stack
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Frontend
+- **React** (with Vite for blazing-fast development)
+- **TypeScript**
+- **React Router** (client-side routing)
+- **Tailwind CSS** (utility-first styling)
+- **ImageKit** (image uploads and optimization)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Backend
+- **Node.js** & **Express.js**
+- **MongoDB** (with Mongoose ODM)
+- **Redis** (caching & rate-limiting)
+- **Clerk** (authentication & user management)
+- **Helmet** (security headers)
+- **Compression** (response compression)
+- **CORS** (cross-origin resource sharing)
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+---
+
+## 📦 Key Libraries & Packages
+- `express-rate-limit` & `rate-limit-redis` (API rate limiting)
+- `react-infinite-scroll-component` (Infinite scrolling)
+- `react-quill-new` (Text Editor)
+- `mongoose` (MongoDB modeling)
+- `@clerk/express` (authentication middleware)
+- `imagekit` (media management)
+- `compression`, `helmet`, `cors` (Express middleware)
+- `winston` (Logging library)
+
+---
+
+## ✨ Features
+- User authentication & authorization
+- Create, edit, and delete blog posts
+- Rich text editing & image uploads
+- Search, filter, and sort posts
+- Caching and rate-limiting for performance & security
+- Responsive, modern UI
+
+---
+
+## 📸 Screenshots
+![Screenshot](./screenshot/screenshot.png)
+
+---
+
+## 📚 Getting Started
+1. Clone the repo
+2. Install dependencies: `npm install`
+3. Set up your `.env` file (see `.env.example`)
+4. Start the development server: `npm run dev`
+
+---
+
+## 🤝 Connect
+If you like this project or want to collaborate, feel free to reach out!
+
+---
+
+> _Thank you for checking out my project!_

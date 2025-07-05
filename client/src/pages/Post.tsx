@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import purify from "dompurify";
 import parse from "html-react-parser";
 import Image from "../components/commons/Image";
