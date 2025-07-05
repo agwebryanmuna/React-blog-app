@@ -1,6 +1,6 @@
 # React Blog App
 
-![App Screenshot](./screenshot/screenshot.png)
+![App Screenshot](./screenshots/screenshot.png)
 
 ## 🚀 Demo
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-View%20Site-brightgreen?style=for-the-badge)](https://site.com)
