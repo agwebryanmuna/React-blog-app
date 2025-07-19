@@ -52,7 +52,7 @@ const PostList = () => {
       loader={<h4>Loading more posts...</h4>}
       endMessage={
         <p>
-          <b>Yay! You have seen all posts</b>
+          {allPosts.length > 0 ? <b>Yay! You have seen all posts</b>: <b>No one's posted yet! How would you like to be the first to create a post?</b>}
         </p>
       }
     >
