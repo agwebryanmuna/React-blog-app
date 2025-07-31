@@ -21,3 +21,61 @@
 .ql-editor {
   border: none !important;
 }
+
+#postContent  {
+  h1 {
+    @apply text-3xl font-bold mb-4 mt-6;
+  }
+
+  h2 {
+    @apply text-2xl font-semibold mb-3 mt-5;
+  }
+
+  h3 {
+    @apply text-xl font-medium mb-2 mt-4;
+  }
+
+  p {
+    @apply text-base leading-7 mb-4;
+  }
+
+  a {
+    @apply text-blue-600 underline hover:text-blue-800;
+  }
+
+  ul {
+    @apply list-disc list-inside mb-4;
+  }
+
+  ol {
+    @apply list-decimal list-inside mb-4;
+  }
+
+  li {
+    @apply mb-2;
+  }
+
+  blockquote {
+    @apply border-l-4 border-gray-300 pl-4 italic text-gray-600 mb-4;
+  }
+
+  pre {
+    @apply bg-gray-100 p-4 rounded overflow-x-auto mb-4;
+  }
+
+  img {
+    @apply max-w-full h-auto my-4 rounded;
+  }
+
+  u {
+    @apply underline;
+  }
+
+  b {
+    @apply font-bold;
+  }
+
+  strike {
+    @apply line-through;
+  }
+}

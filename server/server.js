@@ -13,7 +13,6 @@ import { globalLimiter } from "./src/middleware/rateLimitMiddleware.js";
 import logger from "./src/logger/logger.js";
 
 const app = express();
-
 // connect db
 await connectDb();
 

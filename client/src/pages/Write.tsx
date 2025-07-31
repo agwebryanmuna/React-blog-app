@@ -20,10 +20,6 @@ const Write = () => {
 
   const navigate = useNavigate();
 
-  if (!isLoaded) return <div className="">Loading...</div>;
-
-  if (isLoaded && !isSignedIn) return <div>You should login!</div>;
-
   const createNewPost = useMutation({
     mutationFn: async (newPost: PostTypeRequest) => {
       const token = await getToken();
@@ -64,10 +60,16 @@ const Write = () => {
   };
 
   useEffect(() => {
-    contentImage &&
-      setValue((prev) => prev + `<p><img src=${contentImage} /></p>`);
+    if(contentImage) {
+      setValue((prev) => prev + `<p><img src=${contentImage} alt="Image" /></p>`);
+    }
   }, [contentImage]);
-
+  
+  
+  if (!isLoaded) return <div className="">Loading...</div>;
+  
+  if (isLoaded && !isSignedIn) return <div>You should login!</div>;
+  
   return (
     <div className="h-[calc(100vh-64px)] md:h-[calc(100vh-80px)] flex flex-col gap-6">
       <h1 className="text-clip font-light">Create a New Post</h1>

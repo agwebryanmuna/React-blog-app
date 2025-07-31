@@ -85,7 +85,7 @@ const Post = () => {
       {/* content */}
       <div className="flex flex-col md:flex-row gap-8">
         {/* text */}
-        <div className="lg:text-lg flex flex-col gap-6 text-justify grow">
+        <div id={'postContent'} className="lg:text-lg flex flex-col gap-6 text-justify grow">
           {parse(purify.sanitize(post?.content as string))}
         </div>
         {/* menu */}
